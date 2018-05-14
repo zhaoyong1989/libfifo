@@ -17,5 +17,5 @@ void CurlWrapper::createNew() {
 }
 
 int CurlWrapper::new_session() {
-
+    return 0;
 }

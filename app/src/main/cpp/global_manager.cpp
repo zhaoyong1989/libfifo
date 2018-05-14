@@ -66,6 +66,8 @@ int GlobalManager::startRoutine(int type) {
         fyzbEncode();
         pthread_create(&parallelDownloadDataThread, 0, parallelDownloadData, 0);
     }
+
+    return 0;
 }
 
 void GlobalManager::fyzbEncode() {
@@ -73,23 +75,24 @@ void GlobalManager::fyzbEncode() {
 }
 
 int GlobalManager::nativeStart() {
-
+    return 0;
 }
 
 int GlobalManager::nativeRestart() {
-
+    return 0;
 }
 
 int GlobalManager::createWriteChannel() {
     //创建socket通信
+    return 0;
 }
 
 int GlobalManager::read_android_file(char *) {
-
+    return 0;
 }
 
 char* GlobalManager::getPlayUrl() {
-
+    return 0;
 }
 
 void GlobalManager::setCurrentSourceInvalid() {
@@ -109,7 +112,7 @@ void GlobalManager::add_play_rtmpToFifo() {
 }
 
 int GlobalManager::cloneChannelInfo() {
-
+    return 0;
 }
 
 void GlobalManager::sendEventToPlayer(int event) {
@@ -125,7 +128,7 @@ void GlobalManager::add_play_cpFail() {
 }
 
 void* GlobalManager::getRegularContent(RegularInfo *, RegularInfo *, int, int) {
-
+    return 0;
 }
 
 void GlobalManager::generateRegularInfo() {
@@ -144,6 +147,7 @@ void GlobalManager::downloadPath() {
 bool GlobalManager::parse_addr2() {
     checkDnsBuffer();
     ares_library_init();
+    return 0;
 }
 
 void GlobalManager::httpDownload() {
@@ -155,7 +159,7 @@ void GlobalManager::ares_library_init() {
 }
 
 bool GlobalManager::checkDnsBuffer() {
-
+    return 0;
 }
 
 void GlobalManager::downloadInit() {
@@ -171,25 +175,28 @@ void GlobalManager::notifyPlayerToRestart() {
 }
 
 bool GlobalManager::doRequest() {
-
+    return 0;
 }
 
 void* GlobalManager::channelRegularReporterProcess(void *mySelf) {
     GlobalManager* globalManager = (GlobalManager*)mySelf;
     globalManager->notifyPlayerToChangeSource();
     globalManager->notifyPlayerToRestart();
+    return 0;
 }
 
 void* GlobalManager::downloadChannelInfoThreadWithFifo(void *mySelf) {
     GlobalManager* globalManager = (GlobalManager*)mySelf;
     globalManager->startRoutine(1);
+    return 0;
 }
 
 void* GlobalManager::generateDataRate(void *mySelf) {
-
+    return 0;
 }
 
 void* GlobalManager::parallelDownloadData(void *mySelf) {
     GlobalManager* globalManager = (GlobalManager*)mySelf;
     globalManager->doRequest();
+    return 0;
 }

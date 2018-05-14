@@ -11,19 +11,36 @@ cmake_minimum_required(VERSION 3.4.1)
 # Gradle automatically packages shared libraries with your APK.
 
 add_library( # Sets the name of the library.
-             libfifo-v7a
+             fifo-v7a
 
              # Sets the library as a shared library.
              SHARED
 
              # Provides a relative path to your source file(s).
-             src/main/cpp/libfifo.cpp
-             src/main/cpp/thread_manager.cpp
-             src/main/cpp/global_manager.cpp
-             src/main/cpp/m3u8manager.cpp
-             src/main/cpp/p2pmanager.cpp
+             src/main/cpp/channel_play_info_manager.cpp
+             src/main/cpp/curlwrapper.cpp
              src/main/cpp/fifo_data_manager.cpp
-             src/main/cpp/regularInfo.cpp)
+             src/main/cpp/fifo_m3u8data_manager.cpp
+             src/main/cpp/global_manager.cpp
+             src/main/cpp/lib_event_task_scheduler.cpp
+             src/main/cpp/libfifo.cpp
+             src/main/cpp/link_manager.cpp
+             src/main/cpp/local_memory.cpp
+             src/main/cpp/m3u8_ts_source.cpp
+             src/main/cpp/m3u8manager.cpp
+             src/main/cpp/m3u8protocol.cpp
+             src/main/cpp/one_data.cpp
+             src/main/cpp/one_file.cpp
+             src/main/cpp/one_packet.cpp
+             src/main/cpp/one_request.cpp
+             src/main/cpp/p2p_client.cpp
+             src/main/cpp/p2pmanager.cpp
+             src/main/cpp/regularInfo.cpp
+             src/main/cpp/third_m3u8_manager.cpp
+             src/main/cpp/third_m3u8_protocol.cpp
+             src/main/cpp/thread_manager.cpp
+             src/main/cpp/tspiecedownload.cpp
+             src/main/cpp/encrypt/encrypt.cpp)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -43,7 +60,7 @@ find_library( # Sets the name of the path variable.
 # build script, prebuilt third-party libraries, or system libraries.
 
 target_link_libraries( # Specifies the target library.
-                       libfifo-v7a
+                       fifo-v7a
 
                        # Links the target library to the log library
                        # included in the NDK.

@@ -23,3 +23,7 @@ void ChannelPlayInfoManager::updateInvalidSpan() {
 void ChannelPlayInfoManager::rewriteCdnList() {
 
 }
+
+void ChannelPlayInfoManager::getCurrentCdnUrl() {
+
+}

@@ -3,10 +3,13 @@ package com.libfifo;
 import android.os.Handler;
 import android.os.Message;
 
+import com.entgroup.BasicToolUtil;
+import com.entgroup.GlobalConfig;
+
 public class FifoController {
 
 	static {
-		System.loadLibrary("libfifo-v7a");
+		System.loadLibrary("fifo-v7a");
 	}
 
 	public static native String decryptVipPlayInfo(String encryptPlayInfo);

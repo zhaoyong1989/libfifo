@@ -47,5 +47,5 @@ int ThreadManager::saveThreadInfo(pthread_mutex_t *a1, int a2, int a3) {
 }
 
 int ThreadManager::removeThreadInfo() {
-
+    return 0;
 }

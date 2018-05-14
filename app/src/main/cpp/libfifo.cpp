@@ -1,11 +1,16 @@
 #include <jni.h>
-#include <string.h>
+#include <string>
 #include <pthread.h>
+#include <memory.h>
 
 #include "thread_manager.h"
 #include "m3u8manager.h"
 #include "global_manager.h"
 #include "p2pmanager.h"
+#include "encrypt/encrypt.h"
+#include "tools/CommonTools.h"
+
+#define LOG_TAG "libbase64"
 
 typedef int (*fifo_callback)(int event);
 
@@ -99,71 +104,6 @@ bool rtmpChangedToData;
 
 bool isCompatible;
 
-
-double add_play_vo2() {
-
-}
-
-double add_play_vo() {
-
-}
-
-void add_flv_vo() {
-
-}
-
-void add_ts_vo() {
-
-}
-
-void add_direct_vo() {
-
-}
-
-void add_ses_play_pc2() {
-
-}
-
-void add_ses_play_pc() {
-
-}
-
-void add_ses_flv_pc() {
-
-}
-
-void add_ses_ts_pc() {
-
-}
-
-void add_ses_direct_pc() {
-
-}
-
-void add_play_pc2() {
-
-}
-
-void add_play_pc() {
-
-}
-
-void add_flv_pc() {
-
-}
-
-void add_ts_pc() {
-
-}
-
-void add_direct_pc() {
-
-}
-
-void clientPlayerPlay(){
-
-}
-
 int procSelfPlay()
 {
     int result; // r0
@@ -199,22 +139,22 @@ void clientPlayerVout() {
         firstVout = true;
         if ( currentPlayMode )
         {
-            if ( currentPlayMode == 1 )
-                add_play_vo2();
+            if ( currentPlayMode == 1 );
+                //add_play_vo2();
         }
         else
         {
-            add_play_vo();
+            //add_play_vo();
             switch ( currentStreamType )
             {
                 case 1:
-                    add_flv_vo();
+                    //add_flv_vo();
                     break;
                 case 2:
-                    add_ts_vo();
+                    //add_ts_vo();
                     break;
                 case 3:
-                    add_direct_vo();
+                    //add_direct_vo();
                     break;
             }
         }
@@ -225,22 +165,22 @@ void clientPlayerCard(void)
 {
     if ( currentPlayMode )
     {
-        if ( currentPlayMode == 1 )
-            add_ses_play_pc2();
+        if ( currentPlayMode == 1 );
+            //add_ses_play_pc2();
     }
     else
     {
-        add_ses_play_pc();
+        //add_ses_play_pc();
         switch ( currentStreamType )
         {
             case 1:
-                add_ses_flv_pc();
+                //add_ses_flv_pc();
                 break;
             case 2:
-                add_ses_ts_pc();
+                //add_ses_ts_pc();
                 break;
             case 3:
-                add_ses_direct_pc();
+                //add_ses_direct_pc();
                 break;
         }
     }
@@ -249,22 +189,22 @@ void clientPlayerCard(void)
         firstCard = 1;
         if ( currentPlayMode )
         {
-            if ( currentPlayMode == 1 )
-                add_play_pc2();
+            if ( currentPlayMode == 1 );
+                //add_play_pc2();
         }
         else
         {
-            add_play_pc();
+            //add_play_pc();
             switch ( currentStreamType )
             {
                 case 1:
-                    add_flv_pc();
+                    //add_flv_pc();
                     break;
                 case 2:
-                    add_ts_pc();
+                    //add_ts_pc();
                     break;
                 case 3:
-                    add_direct_pc();
+                    //add_direct_pc();
                     break;
             }
         }
@@ -361,62 +301,6 @@ int* fifoInit(JNIEnv *env, jclass clazz,
     return NULL;
 }
 
-const char * base64char = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-int Base64Decode(const char* in, unsigned char* out)
-{
-    int i, j;
-    unsigned char k;
-    unsigned char temp[4];
-    for ( i = 0, j = 0; in[i] != '\0' ; i += 4 )
-    {
-        memset( temp, 0xFF, sizeof(temp) );
-        for ( k = 0 ; k < 64 ; k ++ )
-        {
-            if ( base64char[k] == in[i] )
-                temp[0]= k;
-        }
-        for ( k = 0 ; k < 64 ; k ++ )
-        {
-            if ( base64char[k] == in[i+1] )
-                temp[1]= k;
-        }
-        for ( k = 0 ; k < 64 ; k ++ )
-        {
-            if ( base64char[k] == in[i+2] )
-                temp[2]= k;
-        }
-        for ( k = 0 ; k < 64 ; k ++ )
-        {
-            if ( base64char[k] == in[i+3] )
-                temp[3]= k;
-        }
-
-        out[j++] = ((unsigned char)(((unsigned char)(temp[0] << 2))&0xFC)) |
-                       ((unsigned char)((unsigned char)(temp[1]>>4)&0x03));
-        if ( in[i+2] == '=' )
-            break;
-
-        out[j++] = ((unsigned char)(((unsigned char)(temp[1] << 4))&0xF0)) |
-                       ((unsigned char)((unsigned char)(temp[2]>>2)&0x0F));
-        if ( in[i+3] == '=' )
-            break;
-
-        out[j++] = ((unsigned char)(((unsigned char)(temp[2] << 6))&0xF0)) |
-                       ((unsigned char)(temp[3]&0x3F));
-    }
-    return j;
-}
-
-int isNeedDecrypt(unsigned char *src)
-{
-    return *src >> 7;
-}
-
-int decryptChunk(char *dest, unsigned char* src, char* key)
-{
-    //解密，加密方式未知
-}
 
 #ifdef __cplusplus
 extern "C" {
@@ -425,19 +309,16 @@ extern "C" {
 JNIEXPORT jstring JNICALL
 Java_com_libfifo_FifoController_decryptVipPlayInfo(JNIEnv *env, jclass clazz,
                                                    jstring encryptPlayInfo) {
-    char* destString = NULL;
-    char* key = NULL;
+    char* destString;
 
     if (packageName) {
-        if (!strcmp(packageName, "com.zhangyu") || !strcmp(packageName, "air.fyzb3")) {
+        if (!strcmp(packageName, "imifan.vip") || !strcmp(packageName, "air.fyzb3")) {
             if (encryptPlayInfo != NULL) {
-                const char *playInfo = env->GetStringUTFChars(encryptPlayInfo, NULL);
-                //sub_C1C58((void **)&v17, v5); 可能是打印log
-                unsigned char bindata[2050];
-                Base64Decode(playInfo, bindata);
-                if ( isNeedDecrypt(bindata) ) {
-                    decryptChunk(destString, bindata, key);
-                }
+                const char* playInfo = env->GetStringUTFChars(encryptPlayInfo, NULL);
+                byte* base64;
+                long base64Len;
+                Encrypt::base64Decode(playInfo, &base64, &base64Len);
+                destString = Encrypt::decrypt(base64, base64Len);
             }
         }
     }
@@ -448,7 +329,7 @@ Java_com_libfifo_FifoController_decryptVipPlayInfo(JNIEnv *env, jclass clazz,
 JNIEXPORT void JNICALL
 Java_com_libfifo_FifoController_createFifo(JNIEnv *env, jclass clazz,
                                            jstring fifoName, jstring channelId) {
-    if ( gM )
+    /*if ( gM )
     {
         delete gM;
         gM = NULL;
@@ -461,13 +342,13 @@ Java_com_libfifo_FifoController_createFifo(JNIEnv *env, jclass clazz,
     currentSourceSrc = NULL;
     isPlayerStarted = 0;
     preReadBytes = 0;
-    fifoInit(env, clazz, fifoName, channelId);
+    fifoInit(env, clazz, fifoName, channelId);*/
 }
 
 JNIEXPORT void JNICALL
 Java_com_libfifo_FifoController_multiStreamCreateFifo(JNIEnv *env, jclass clazz,
                                                       jstring channelId, jstring br) {
-    if ( gM ) {
+    /*if ( gM ) {
         delete gM;
         gM = NULL;
     }
@@ -488,12 +369,12 @@ Java_com_libfifo_FifoController_multiStreamCreateFifo(JNIEnv *env, jclass clazz,
         currentChannelId = env->GetStringUTFChars(channelId, NULL);
         isMovieChannel = false;//暂时设置为false，跟channelId计算得出，但目前还不知道计算方法
         gM = new GlobalManager(currentChannelId, packageName, signatureHashCode);
-    }
+    }*/
 }
 
 JNIEXPORT void JNICALL
 Java_com_libfifo_FifoController_createFifo2(JNIEnv *env, jclass clazz, jstring channelId) {
-    if ( gM )
+    /*if ( gM )
     {
         delete gM;
         gM = NULL;
@@ -510,7 +391,7 @@ Java_com_libfifo_FifoController_createFifo2(JNIEnv *env, jclass clazz, jstring c
         currentChannelId = env->GetStringUTFChars(channelId, NULL);
         isMovieChannel = false;//暂时设置为false，跟channelId计算得出，但目前还不知道计算方法
         gM = new GlobalManager(currentChannelId, packageName, signatureHashCode);
-    }
+    }*/
 }
 
 JNIEXPORT void JNICALL
@@ -530,7 +411,7 @@ Java_com_libfifo_FifoController_getKey(JNIEnv *env, jclass clazz, jobject obj) {
 
 int fifoClose(JNIEnv *env, jclass clazz)
 {
-    jmethodID isWifiState = env->GetStaticMethodID(clazz, "isWifiState", "()Z");
+    /*jmethodID isWifiState = env->GetStaticMethodID(clazz, "isWifiState", "()Z");
     if ( isWifiState ) {
         isCompatible = true;
         wifiState = env->CallStaticBooleanMethod(clazz, isWifiState);
@@ -540,7 +421,9 @@ int fifoClose(JNIEnv *env, jclass clazz)
     }
     else {
         isCompatible = false;
-    }
+    }*/
+
+    return 0;
 }
 
 double add_play_cl2(void)
@@ -581,7 +464,7 @@ double add_play_cl(void)
 
 JNIEXPORT void JNICALL
 Java_com_libfifo_FifoController_closeFifo(JNIEnv *env, jclass clazz) {
-    fifoClose(env, clazz);
+    /*fifoClose(env, clazz);
     bitrate = "origin";
     interrupt = true;
     isPlayerStarted = false;
@@ -607,15 +490,17 @@ Java_com_libfifo_FifoController_closeFifo(JNIEnv *env, jclass clazz) {
         {
             add_play_cl();
         }
-    }
+    }*/
 }
 
 JNIEXPORT jint JNICALL
 Java_com_libfifo_FifoController_getFifoLength(JNIEnv *env, jclass clazz) {
+    return 0;
 }
 
 JNIEXPORT jint JNICALL
 Java_com_libfifo_FifoController_getFifoSize(JNIEnv *env, jclass clazz) {
+    return 0;
 }
 
 JNIEXPORT jstring JNICALL
@@ -632,7 +517,7 @@ JNIEXPORT void JNICALL
 Java_com_libfifo_FifoController_setClientInfo2(JNIEnv *env, jclass clazz,
                                                jstring plat, jstring id, jstring model,
                                                jstring deviceName, jstring pid) {
-    if (plat) {
+    /*if (plat) {
         platform = env->GetStringUTFChars(plat, NULL);
     }
 
@@ -652,7 +537,7 @@ Java_com_libfifo_FifoController_setClientInfo2(JNIEnv *env, jclass clazz,
         reportPartnerId = env->GetStringUTFChars(pid, NULL);
     }
 
-    initStatistic();
+    initStatistic();*/
 }
 
 JNIEXPORT void JNICALL
@@ -669,17 +554,17 @@ Java_com_libfifo_FifoController_setVLCPlayCard(JNIEnv *env, jclass clazz) {
 
 JNIEXPORT void JNICALL
 Java_com_libfifo_FifoController_setDebug(JNIEnv *env, jclass clazz, jboolean param) {
-    if (param) {
+    /*if (param) {
         debugInfo = "%s%s";
     } else {
         debugInfo = defaultCookie;
-    }
+    }*/
 }
 
 JNIEXPORT jdouble JNICALL
 Java_com_libfifo_FifoController_getCurrentPlayTime(JNIEnv *env, jclass clazz, jboolean param) {
     double result; // r0
-    M3U8Manager *m3U8Manager; // r0
+    /*M3U8Manager *m3U8Manager; // r0
     P2PManager* p2PManager;
 
     if ( !isPlayerStarted || !gM )
@@ -698,29 +583,34 @@ Java_com_libfifo_FifoController_getCurrentPlayTime(JNIEnv *env, jclass clazz, jb
             return 0.0;
         m3U8Manager = new M3U8Manager();
         result = m3U8Manager->getCurrentPlayTime();
-    }
+    }*/
     return result;
 }
 
 JNIEXPORT jint JNICALL
 Java_com_libfifo_FifoController_checkCard(JNIEnv *env, jclass clazz, jdouble buffersize,
                                           jdouble vlcReadBytes) {
+    return 0;
 }
 
 JNIEXPORT jint JNICALL
 Java_com_libfifo_FifoController_getP2PDownloadRate(JNIEnv *env, jclass clazz) {
+    return 0;
 }
 
 JNIEXPORT jint JNICALL
 Java_com_libfifo_FifoController_getP2PUploadRate(JNIEnv *env, jclass clazz) {
+    return 0;
 }
 
 JNIEXPORT jint JNICALL
 Java_com_libfifo_FifoController_getCDNDownloadRate(JNIEnv *env, jclass clazz) {
+    return 0;
 }
 
 JNIEXPORT jstring JNICALL
 Java_com_libfifo_FifoController_getPlayUrl(JNIEnv *env, jclass clazz) {
+    return 0;
 }
 
 JNIEXPORT void JNICALL
@@ -756,25 +646,25 @@ Java_com_libfifo_FifoController_setDirectPlayCard(JNIEnv *env, jclass clazz) {
 
 JNIEXPORT void JNICALL
 Java_com_libfifo_FifoController_setPlayerVout(JNIEnv *env, jclass clazz) {
-    isPlayerStarted = true;
+    /*isPlayerStarted = true;
     isCardToSwitch = false;
     isSwitchEntry = false;
-    clientPlayerVout();
+    clientPlayerVout();*/
 }
 
 JNIEXPORT void JNICALL
 Java_com_libfifo_FifoController_setPlayerCard(JNIEnv *env, jclass clazz) {
-    if ( isPlayerStarted )
+    /*if ( isPlayerStarted )
     {
         clientPlayerCard();
         procSelfPause();
-    }
+    }*/
 }
 
 JNIEXPORT void JNICALL
 Java_com_libfifo_FifoController_setPlayerPlay(JNIEnv *env, jclass clazz) {
-    clientPlayerPlay();
-    procSelfPlay();
+    /*clientPlayerPlay();
+    procSelfPlay();*/
 }
 
 JNIEXPORT void JNICALL

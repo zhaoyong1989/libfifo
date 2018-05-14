@@ -30,4 +30,29 @@ double FifoDataManager::getWriteDataTime() {
     else
         result = (double)*((signed int *)v1 + 5) + 0.0;
     return result;*/
+    return 0;
+}
+
+void FifoDataManager::start() {
+    pthread_create(&writeVideoDataThreadId, 0, writeVideoData, 0);
+}
+
+void* FifoDataManager::writeVideoData(void * mySelf) {
+    FifoDataManager* fifoDataManager = (FifoDataManager*)(mySelf);
+    fifoDataManager->writeBytesToFd();
+    fifoDataManager->decryptChunk();
+    fifoDataManager->rewriteData();
+    return 0;
+}
+
+void FifoDataManager::writeBytesToFd() {
+
+}
+
+void FifoDataManager::decryptChunk() {
+
+}
+
+void FifoDataManager::rewriteData() {
+
 }

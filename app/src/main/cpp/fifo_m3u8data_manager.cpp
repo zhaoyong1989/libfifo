@@ -21,6 +21,7 @@ void* FifoM3u8DataManager::writeFifoThreadProcess(void * mySelf) {
     manager->writeBytesToChannel();
     manager->consumeXBytes();
     manager->addXWriteFifoBytes();
+    return 0;
 }
 
 void FifoM3u8DataManager::consumeXBytes() {
@@ -28,5 +29,9 @@ void FifoM3u8DataManager::consumeXBytes() {
 }
 
 void FifoM3u8DataManager::addXWriteFifoBytes() {
+
+}
+
+void FifoM3u8DataManager::writeBytesToChannel() {
 
 }

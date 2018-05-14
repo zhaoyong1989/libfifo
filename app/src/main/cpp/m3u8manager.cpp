@@ -4,6 +4,9 @@
 
 #include "m3u8manager.h"
 
+LocalMemory* M3U8Manager::gTSLocalMemory = new LocalMemory();
+P2PClient* M3U8Manager::gTSP2PClient = new P2PClient();
+
 M3U8Manager::M3U8Manager() {
 
 }
@@ -38,16 +41,104 @@ void M3U8Manager::loadConf() {
     curlWrapper->new_session();
 }
 
+void M3U8Manager::createFifoProcess() {
+    if(fifoDataManager != NULL) {
+        fifoDataManager->start();
+    }
+}
+
+void M3U8Manager::initP2P() {
+    oneFile = new OneFile();
+    oneRequest = new OneRequest();
+    onePacket = new OnePacket();
+    oneData = new OneData();
+}
+
+void M3U8Manager::notifyM3u8RefreshBitmap() {
+    refreshBitmap();
+}
+
+void M3U8Manager::notifyM3u8ToHttpDownload() {
+    downloadP2PFailedPiece();
+}
+
+void M3U8Manager::notifyM3u8OneFile() {
+
+}
+
+void M3U8Manager::notifyM3u8RequestPeer() {
+
+}
+
+void M3U8Manager::refreshBitmap() {
+
+}
+
+void M3U8Manager::downloadP2PFailedPiece() {
+    if(tsPieceDownload != NULL) {
+        tsPieceDownload->downloadPieceDataWithPieceid();
+    }
+}
+
+void M3U8Manager::initWindow() {
+    if (gTSLocalMemory != NULL) {
+        gTSLocalMemory->initPendingData();
+    }
+
+    if (tsPieceDownload != NULL) {
+        tsPieceDownload->downloadPieceDataWithPieceid();
+    }
+}
+
+void M3U8Manager::generateUrl() {
+    assignMission();
+}
+
+void M3U8Manager::assignMission() {
+    if(fifoDataManager != NULL) {
+        fifoDataManager->getWriteDataTime();
+    }
+    moveOnStep();
+    if(gTSLocalMemory != NULL) {
+        gTSLocalMemory->initPendingData();
+    }
+
+    if(gTSP2PClient != NULL) {
+        gTSP2PClient->addMission();
+    }
+    if(tsPieceDownload != NULL) {
+        tsPieceDownload->downloadPieceDataWithPieceid();
+    }
+}
+
+void M3U8Manager::moveOnStep() {
+    if(gTSLocalMemory != NULL) {
+        gTSLocalMemory->moveOnStep();
+    }
+}
+
+void M3U8Manager::checkDownload() {
+    if(linkManager != NULL) {
+        linkManager->lockTheLink();
+    }
+
+    if(tsPieceDownload != NULL) {
+        tsPieceDownload->initTsRangeWithPieceId();
+    }
+}
+
 void* M3U8Manager::ThreadProcess(void *mySelf) {
     M3U8Manager* manager = (M3U8Manager*)mySelf;
     manager->M3U8ManagerRoutine();
+    return 0;
 }
 
 void* M3U8Manager::generateM3u8Process(void *mySelf) {
     M3U8Manager* manager = (M3U8Manager*)mySelf;
-    M3U8Manager::createFifoProcess((M3U8Manager *)a1);
-    M3U8Manager::initP2P(v2);
-    M3U8Manager::initWindow(v2);
-    M3U8Manager::generateUrl((int)v2);
-    M3U8Manager::checkDownload(v2);
+    manager->createFifoProcess();
+    manager->initP2P();
+    manager->initWindow();
+    manager->generateUrl();
+    manager->checkDownload();
+    return 0;
 }

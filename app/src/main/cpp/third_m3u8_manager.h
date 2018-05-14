@@ -14,6 +14,7 @@ public:
 
     int clientStart();
     void freeThirdM3U8Manager();
+    void ThirdM3U8ManagerRoutine();
 
     static void* ThirdthreadProcess(void* mySelf);
 

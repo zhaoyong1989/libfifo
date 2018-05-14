@@ -14,6 +14,8 @@ public:
     void updateInvalidSpan();
     void rewriteCdnList();
 
+    void getCurrentCdnUrl();
+
 private:
     int currentAvailableStreamNum;
     int currentStreamType;
