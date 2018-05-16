@@ -312,7 +312,7 @@ Java_com_libfifo_FifoController_decryptVipPlayInfo(JNIEnv *env, jclass clazz,
     char* destString;
 
     if (packageName) {
-        if (!strcmp(packageName, "imifan.vip") || !strcmp(packageName, "air.fyzb3")) {
+        if (!strcmp(packageName, "com.entgroup") || !strcmp(packageName, "air.fyzb3")) {
             if (encryptPlayInfo != NULL) {
                 const char* playInfo = env->GetStringUTFChars(encryptPlayInfo, NULL);
                 byte* base64;

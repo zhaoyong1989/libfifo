@@ -66,7 +66,7 @@ int Encrypt::base64Decode(const char *indata, byte **outdata, long *outlen) {
     else if(strstr(indata,"="))
         str_len = len/4*3-1;
     else
-        str_len = len/4;
+        str_len = len/4*3;
 
     res = (byte*)malloc(sizeof(unsigned char)*str_len+1);
     //outdata[str_len]='\0';
@@ -151,6 +151,7 @@ char *Encrypt::decrypt(byte *strSource, long inlen) {
                     result[i] = (byte) (strSource[offset + i] ^
                                         ((i & 1) == 0 ? even_xor : odd_xor));
                 }
+                result[length] = '\0';
                 return result;
             }
         }
